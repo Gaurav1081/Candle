@@ -10,7 +10,7 @@ export const useNotifications = () => {
   return ctx;
 };
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 const POLL_INTERVAL_MS   = 60_000;  // Poll every 60s — safe for any rate limit config
 const BACKOFF_INTERVAL_MS = 5 * 60_000; // Back off to 5 min if we hit a 429
 
