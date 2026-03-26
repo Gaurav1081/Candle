@@ -162,7 +162,7 @@ const fetchCurrentPrice = async (ticker) => {
   return null;
 };
 
-// Finnhub price fetcher
+// Finnhub price fetcher — uses previous close (data.pc) as fallback when market is closed
 const fetchPriceFromFinnhub = async (ticker) => {
   const FINNHUB_API_KEY = process.env.FINNHUB_API_KEY;
   if (!FINNHUB_API_KEY) return null;
@@ -174,10 +174,16 @@ const fetchPriceFromFinnhub = async (ticker) => {
     
     if (!response.ok) return null;
     const data = await response.json();
-    if (data.error || !data.c) return null;
-    
-    console.log(`✅ Fetched price from Finnhub: ${ticker} = $${data.c}`);
-    return data.c;
+    if (data.error) return null;
+
+    // data.c = current/live price (0 when market is closed)
+    // data.pc = previous close (always available)
+    const price = data.c > 0 ? data.c : data.pc;
+    if (!price) return null;
+
+    const source = data.c > 0 ? 'live' : 'previous close';
+    console.log(`✅ Fetched price from Finnhub (${source}): ${ticker} = $${price}`);
+    return price;
   } catch (error) {
     console.error(`Finnhub price error:`, error.message);
     return null;
