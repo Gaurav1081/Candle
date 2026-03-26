@@ -284,34 +284,34 @@ function Vs() {
       <div key={match._id} className="relative rounded-xl mb-4">
         <GlowingEffect {...glowProps} />
         <Card className="relative z-10 premium-card border-transparent">
-          <CardContent className="p-6">
+          <CardContent className="p-4 sm:p-6">
             <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="text-lg font-bold flex items-center gap-2 text-white">
-                  <Target className="size-5 text-candle-accent-blue" />
-                  {match.stockSymbol}
+              <div className="flex-1 min-w-0 mr-2">
+                <h3 className="text-base sm:text-lg font-bold flex items-center gap-2 text-white">
+                  <Target className="size-4 sm:size-5 text-candle-accent-blue shrink-0" />
+                  <span className="truncate">{match.stockSymbol}</span>
                 </h3>
-                <p className="text-sm text-candle-muted-blue">{match.company}</p>
+                <p className="text-xs sm:text-sm text-candle-muted-blue truncate">{match.company}</p>
               </div>
               <Badge
-                className={
+                className={`shrink-0 text-xs ${
                   isCompleted ? 'bg-candle-electric-blue/20 text-candle-electric-blue border-candle-electric-blue/30' :
                   isLocked ? 'bg-candle-muted-blue/20 text-candle-muted-blue border-candle-muted-blue/30' :
                   'bg-candle-accent-blue/20 text-candle-accent-blue border-candle-accent-blue/30'
-                }
+                }`}
               >
                 {match.status}
               </Badge>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-4">
+            <div className="grid grid-cols-2 gap-3 mb-4">
               <div>
                 <p className="text-xs text-candle-muted-blue">Duration</p>
-                <p className="font-medium text-white">{getDurationLabel(match.durationMinutes)}</p>
+                <p className="text-sm font-medium text-white">{getDurationLabel(match.durationMinutes)}</p>
               </div>
               <div>
                 <p className="text-xs text-candle-muted-blue">Match Type</p>
-                <p className="font-medium text-white capitalize">{match.matchType}</p>
+                <p className="text-sm font-medium text-white capitalize">{match.matchType}</p>
               </div>
             </div>
 
@@ -324,37 +324,37 @@ function Vs() {
                 return (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-3 border border-candle-electric-blue/20 rounded-lg glass-card"
+                    className="flex items-center justify-between p-2 sm:p-3 border border-candle-electric-blue/20 rounded-lg glass-card"
                   >
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full candle-gradient flex items-center justify-center text-white font-bold text-sm ring-2 ring-candle-electric-blue/20">
+                    <div className="flex items-center gap-2 flex-1 min-w-0">
+                      <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full candle-gradient flex items-center justify-center text-white font-bold text-xs sm:text-sm ring-2 ring-candle-electric-blue/20 shrink-0">
                         {participant.username?.[0]?.toUpperCase() || 'U'}
                       </div>
-                      <div>
-                        <p className="font-medium text-white">
+                      <div className="min-w-0 flex-1">
+                        <p className="font-medium text-white text-sm truncate">
                           {participant.username || 'Unknown'}
                           {isCurrentUser && (
-                            <span className="text-xs text-candle-muted-blue ml-2">(You)</span>
+                            <span className="text-xs text-candle-muted-blue ml-1">(You)</span>
                           )}
                         </p>
                         {participant.priceDirection ? (
-                          <p className="text-xs text-candle-muted-blue">
+                          <p className="text-xs text-candle-muted-blue truncate">
                             Predicted: {participant.priceDirection}
                             {participant.confidence && ` (${participant.confidence}⭐)`}
                           </p>
                         ) : (
-                          <p className="text-xs text-candle-muted-blue italic">Waiting for prediction...</p>
+                          <p className="text-xs text-candle-muted-blue italic">Waiting...</p>
                         )}
                       </div>
                     </div>
                     {isCompleted && (
-                      <div className="text-right">
+                      <div className="text-right shrink-0 ml-2">
                         <Badge
-                          className={
+                          className={`text-xs ${
                             participant.isWinner
                               ? 'bg-green-400/20 text-green-400 border-green-400/30'
                               : 'bg-red-400/20 text-red-400 border-red-400/30'
-                          }
+                          }`}
                         >
                           {participant.isWinner ? 'Winner' : participant.outcome}
                         </Badge>
@@ -381,7 +381,7 @@ function Vs() {
             {isCompleted && match.resultDetails && (
               <div className="mt-4 p-3 border border-candle-electric-blue/20 rounded-lg glass-card flex items-center gap-2">
                 <Trophy className="size-4 text-candle-accent-blue shrink-0" />
-                <p className="text-sm text-candle-muted-blue">{match.resultDetails}</p>
+                <p className="text-xs sm:text-sm text-candle-muted-blue">{match.resultDetails}</p>
               </div>
             )}
           </CardContent>
@@ -394,19 +394,19 @@ function Vs() {
     <div key={match._id} className="relative rounded-xl mb-4">
       <GlowingEffect {...glowProps} />
       <Card className="relative z-10 premium-card border-transparent">
-        <CardContent className="p-6">
+        <CardContent className="p-4 sm:p-6">
           <div className="flex items-start justify-between mb-4">
-            <div>
-              <h3 className="text-lg font-bold text-white">{match.stockSymbol}</h3>
-              <p className="text-sm text-candle-muted-blue">{match.company}</p>
+            <div className="flex-1 min-w-0 mr-2">
+              <h3 className="text-base sm:text-lg font-bold text-white truncate">{match.stockSymbol}</h3>
+              <p className="text-xs sm:text-sm text-candle-muted-blue truncate">{match.company}</p>
             </div>
-            <Badge className="bg-candle-electric-blue/20 text-candle-electric-blue border-candle-electric-blue/30">
+            <Badge className="bg-candle-electric-blue/20 text-candle-electric-blue border-candle-electric-blue/30 shrink-0 text-xs">
               {getDurationLabel(match.durationMinutes)}
             </Badge>
           </div>
           <div className="flex items-center gap-2 mb-4">
-            <Users className="size-4 text-candle-muted-blue" />
-            <span className="text-sm text-candle-muted-blue">
+            <Users className="size-4 text-candle-muted-blue shrink-0" />
+            <span className="text-xs sm:text-sm text-candle-muted-blue truncate">
               Created by {match.createdBy?.username || 'Unknown'}
             </span>
           </div>
@@ -423,7 +423,7 @@ function Vs() {
 
   if (loading) {
     return (
-      <div className="p-6">
+      <div className="p-4 sm:p-6">
         <div className="flex items-center justify-center h-96">
           <div className="text-center">
             <Clock className="size-12 mx-auto mb-4 animate-spin text-candle-accent-blue" />
@@ -435,24 +435,25 @@ function Vs() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-4 sm:p-6 space-y-4 sm:space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold flex items-center gap-2 text-white">
+      <div className="flex items-center justify-between gap-3">
+        <div className="min-w-0">
+          <h1 className="text-2xl sm:text-3xl font-bold flex items-center gap-2 text-white">
             VS Mode
           </h1>
-          <p className="text-candle-muted-blue mt-1">
+          <p className="text-xs sm:text-sm text-candle-muted-blue mt-1">
             Challenge others in head-to-head predictions
           </p>
         </div>
         <Button
           onClick={() => setShowCreateModal(true)}
-          size="lg"
-          className="candle-gradient hover:shadow-glow transition-all"
+          size="sm"
+          className="candle-gradient hover:shadow-glow transition-all shrink-0 sm:size-lg"
         >
-          <Plus className="size-4 mr-2" />
-          Create Challenge
+          <Plus className="size-4 sm:mr-2" />
+          <span className="hidden sm:inline">Create Challenge</span>
+          <span className="sm:hidden sr-only">Create</span>
         </Button>
       </div>
 
@@ -461,24 +462,24 @@ function Vs() {
         <div className="relative rounded-xl">
           <GlowingEffect {...glowProps} />
           <Card className="relative z-10 premium-card border-transparent">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-white">
-                <Trophy className="size-5 text-candle-accent-blue" />
+            <CardHeader className="pb-2 sm:pb-6 px-4 sm:px-6 pt-4 sm:pt-6">
+              <CardTitle className="flex items-center gap-2 text-white text-base sm:text-xl">
+                <Trophy className="size-4 sm:size-5 text-candle-accent-blue" />
                 Your VS Record
               </CardTitle>
             </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-5 gap-4">
+            <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
+              <div className="grid grid-cols-5 gap-1 sm:gap-4">
                 {[
                   { label: 'Wins', value: vsStats.wins || 0, color: 'text-green-400' },
                   { label: 'Losses', value: vsStats.losses || 0, color: 'text-red-400' },
                   { label: 'Ties', value: vsStats.ties || 0, color: 'text-candle-muted-blue' },
                   { label: 'Win Rate', value: `${vsStats.winRate?.toFixed(1) || '0.0'}%`, color: 'text-white' },
-                  { label: 'Total Points', value: vsStats.totalPoints || 0, color: 'text-candle-accent-blue' },
+                  { label: 'Points', value: vsStats.totalPoints || 0, color: 'text-candle-accent-blue' },
                 ].map((stat) => (
                   <div key={stat.label} className="text-center">
-                    <div className={`text-2xl font-bold ${stat.color}`}>{stat.value}</div>
-                    <div className="text-sm text-candle-muted-blue">{stat.label}</div>
+                    <div className={`text-lg sm:text-2xl font-bold ${stat.color}`}>{stat.value}</div>
+                    <div className="text-xs text-candle-muted-blue leading-tight">{stat.label}</div>
                   </div>
                 ))}
               </div>
@@ -487,20 +488,20 @@ function Vs() {
         </div>
       )}
 
-      {/* Tabs */}
-      <div className="border-b border-candle-electric-blue/20">
-        <div className="flex gap-4">
+      {/* Tabs — horizontally scrollable on mobile */}
+      <div className="border-b border-candle-electric-blue/20 overflow-x-auto">
+        <div className="flex gap-1 sm:gap-4 min-w-max">
           {[
             { id: 'active', label: 'Active', count: activeMatches.length },
             { id: 'waiting', label: 'Waiting', count: waitingMatches.length },
             { id: 'invites', label: 'Invites', count: invites.length },
-            { id: 'open', label: 'Open Challenges', count: openMatches.length },
+            { id: 'open', label: 'Open', count: openMatches.length },
             { id: 'history', label: 'History', count: completedMatches.length }
           ].map((tab) => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-3 px-2 border-b-2 transition-colors ${
+              className={`pb-3 px-2 sm:px-3 border-b-2 transition-colors text-xs sm:text-sm whitespace-nowrap ${
                 activeTab === tab.id
                   ? 'border-candle-accent-blue text-candle-accent-blue font-medium'
                   : 'border-transparent text-candle-muted-blue hover:text-white'
@@ -513,7 +514,7 @@ function Vs() {
       </div>
 
       {/* Tab Content */}
-      <div className="mt-6">
+      <div className="mt-4 sm:mt-6">
         {activeTab === 'active' && (
           <div>
             {activeMatches.length === 0 ? (
@@ -589,12 +590,12 @@ function Vs() {
           setUserSearchResults([]);
         }
       }}>
-        <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto premium-card border-candle-electric-blue/30">
+        <DialogContent className="w-[calc(100vw-2rem)] sm:w-auto sm:max-w-[600px] max-h-[85vh] overflow-y-auto premium-card border-candle-electric-blue/30 rounded-xl">
           <DialogHeader>
-            <DialogTitle className="text-white">
+            <DialogTitle className="text-white text-base sm:text-lg">
               {createStep === 1 ? 'Search Stock' : 'Create VS Challenge'}
             </DialogTitle>
-            <DialogDescription className="text-candle-muted-blue">
+            <DialogDescription className="text-candle-muted-blue text-xs sm:text-sm">
               {createStep === 1
                 ? 'Search for a stock to create a challenge'
                 : 'Set up your challenge details'}
@@ -610,28 +611,28 @@ function Vs() {
                   placeholder="Search stocks (e.g., AAPL, Tesla)..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10 bg-candle-electric-blue/10 border-candle-electric-blue/30 text-white placeholder:text-candle-muted-blue focus:border-candle-accent-blue"
+                  className="pl-10 bg-candle-electric-blue/10 border-candle-electric-blue/30 text-white placeholder:text-candle-muted-blue focus:border-candle-accent-blue text-sm"
                 />
               </div>
 
               {searchLoading && (
-                <p className="text-center text-candle-muted-blue py-4">Searching...</p>
+                <p className="text-center text-candle-muted-blue py-4 text-sm">Searching...</p>
               )}
 
               {searchResults.length > 0 && (
-                <div className="space-y-2 max-h-96 overflow-y-auto">
+                <div className="space-y-2 max-h-72 sm:max-h-96 overflow-y-auto">
                   {searchResults.map((stock) => (
                     <div
                       key={stock.symbol}
                       className="flex items-center justify-between p-3 border border-candle-electric-blue/20 rounded-lg glass-card hover:glass-card-light hover:border-candle-accent-blue/50 cursor-pointer transition-all duration-300"
                       onClick={() => handleSelectStock(stock)}
                     >
-                      <div className="flex-1">
+                      <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2">
-                          <span className="font-bold text-white">{stock.symbol}</span>
-                          <span className="text-sm text-candle-muted-blue truncate">{stock.description}</span>
+                          <span className="font-bold text-white text-sm">{stock.symbol}</span>
+                          <span className="text-xs text-candle-muted-blue truncate">{stock.description}</span>
                         </div>
-                        <div className="flex items-center gap-3 text-sm mt-1">
+                        <div className="flex items-center gap-3 text-xs sm:text-sm mt-1">
                           <span className="text-white">{formatPrice(stock.currentPrice)}</span>
                           <span className={stock.change >= 0 ? 'text-green-400' : 'text-red-400'}>
                             {stock.change >= 0
@@ -641,36 +642,36 @@ function Vs() {
                           </span>
                         </div>
                       </div>
-                      <ArrowRight className="size-4 text-candle-muted-blue" />
+                      <ArrowRight className="size-4 text-candle-muted-blue shrink-0 ml-2" />
                     </div>
                   ))}
                 </div>
               )}
 
               {!searchLoading && searchQuery && searchResults.length === 0 && (
-                <p className="text-center text-candle-muted-blue py-4">No stocks found</p>
+                <p className="text-center text-candle-muted-blue py-4 text-sm">No stocks found</p>
               )}
             </div>
           ) : (
             <form onSubmit={handleCreateChallenge} className="space-y-4">
               {createError && (
                 <Alert variant="destructive" className="border-red-400/30 bg-red-500/10">
-                  <AlertDescription className="text-red-400">{createError}</AlertDescription>
+                  <AlertDescription className="text-red-400 text-sm">{createError}</AlertDescription>
                 </Alert>
               )}
 
-              <div className="p-4 border border-candle-electric-blue/20 rounded-lg glass-card">
+              <div className="p-3 sm:p-4 border border-candle-electric-blue/20 rounded-lg glass-card">
                 <div className="flex items-center justify-between">
-                  <div>
-                    <p className="font-bold text-white">{selectedStock?.symbol}</p>
-                    <p className="text-sm text-candle-muted-blue">{selectedStock?.description}</p>
+                  <div className="min-w-0 flex-1 mr-2">
+                    <p className="font-bold text-white text-sm">{selectedStock?.symbol}</p>
+                    <p className="text-xs text-candle-muted-blue truncate">{selectedStock?.description}</p>
                   </div>
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
                     onClick={() => { setCreateStep(1); setSelectedStock(null); }}
-                    className="text-candle-muted-blue hover:text-white hover:bg-candle-electric-blue/10"
+                    className="text-candle-muted-blue hover:text-white hover:bg-candle-electric-blue/10 shrink-0 text-xs"
                   >
                     Change
                   </Button>
@@ -678,12 +679,12 @@ function Vs() {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-candle-muted-blue">Match Type</Label>
+                <Label className="text-candle-muted-blue text-xs sm:text-sm">Match Type</Label>
                 <Select
                   value={formData.matchType}
                   onValueChange={(value) => setFormData({ ...formData, matchType: value, invitedUsername: '' })}
                 >
-                  <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white">
+                  <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -695,7 +696,7 @@ function Vs() {
 
               {formData.matchType === 'invite' && (
                 <div className="space-y-2">
-                  <Label className="text-candle-muted-blue">Search and Select User</Label>
+                  <Label className="text-candle-muted-blue text-xs sm:text-sm">Search and Select User</Label>
                   <div className="relative">
                     <Search className="absolute left-3 top-3 size-4 text-candle-muted-blue" />
                     <Input
@@ -706,7 +707,7 @@ function Vs() {
                         setUserSearchQuery(e.target.value);
                         setFormData({ ...formData, invitedUsername: '' });
                       }}
-                      className="pl-10 bg-candle-electric-blue/10 border-candle-electric-blue/30 text-white placeholder:text-candle-muted-blue focus:border-candle-accent-blue"
+                      className="pl-10 bg-candle-electric-blue/10 border-candle-electric-blue/30 text-white placeholder:text-candle-muted-blue focus:border-candle-accent-blue text-sm"
                     />
                   </div>
 
@@ -722,12 +723,12 @@ function Vs() {
                           className="p-2 hover:bg-candle-electric-blue/10 cursor-pointer flex items-center gap-2 transition-colors"
                           onClick={() => handleSelectUser(searchUser)}
                         >
-                          <div className="w-6 h-6 rounded-full candle-gradient flex items-center justify-center text-white font-bold text-xs">
+                          <div className="w-6 h-6 rounded-full candle-gradient flex items-center justify-center text-white font-bold text-xs shrink-0">
                             {searchUser.username[0].toUpperCase()}
                           </div>
-                          <div className="flex-1">
-                            <p className="text-sm font-medium text-white">{searchUser.username}</p>
-                            <p className="text-xs text-candle-muted-blue">{searchUser.fullName}</p>
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium text-white truncate">{searchUser.username}</p>
+                            <p className="text-xs text-candle-muted-blue truncate">{searchUser.fullName}</p>
                           </div>
                         </div>
                       ))}
@@ -736,16 +737,16 @@ function Vs() {
 
                   {formData.invitedUsername && (
                     <div className="p-2 border border-candle-accent-blue/30 bg-candle-accent-blue/10 rounded-lg flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full candle-gradient flex items-center justify-center text-white font-bold text-xs">
+                      <div className="w-6 h-6 rounded-full candle-gradient flex items-center justify-center text-white font-bold text-xs shrink-0">
                         {formData.invitedUsername[0].toUpperCase()}
                       </div>
-                      <p className="text-sm font-medium flex-1 text-white">{formData.invitedUsername}</p>
+                      <p className="text-sm font-medium flex-1 text-white truncate">{formData.invitedUsername}</p>
                       <Button
                         type="button"
                         variant="ghost"
                         size="sm"
                         onClick={() => setFormData({ ...formData, invitedUsername: '' })}
-                        className="text-candle-muted-blue hover:text-white"
+                        className="text-candle-muted-blue hover:text-white shrink-0"
                       >
                         ✕
                       </Button>
@@ -755,12 +756,12 @@ function Vs() {
               )}
 
               <div className="space-y-2">
-                <Label className="text-candle-muted-blue">Duration</Label>
+                <Label className="text-candle-muted-blue text-xs sm:text-sm">Duration</Label>
                 <Select
                   value={formData.durationMinutes.toString()}
                   onValueChange={(value) => setFormData({ ...formData, durationMinutes: parseInt(value) })}
                 >
-                  <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white">
+                  <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white text-sm">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -775,20 +776,20 @@ function Vs() {
                 </Select>
               </div>
 
-              <DialogFooter>
+              <DialogFooter className="flex-col-reverse sm:flex-row gap-2 sm:gap-0">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={() => { setCreateStep(1); setSelectedStock(null); }}
                   disabled={createLoading}
-                  className="border-candle-electric-blue/30 text-candle-muted-blue hover:text-white hover:bg-candle-electric-blue/10"
+                  className="w-full sm:w-auto border-candle-electric-blue/30 text-candle-muted-blue hover:text-white hover:bg-candle-electric-blue/10"
                 >
                   Back
                 </Button>
                 <Button
                   type="submit"
                   disabled={createLoading}
-                  className="candle-gradient hover:shadow-glow transition-all"
+                  className="w-full sm:w-auto candle-gradient hover:shadow-glow transition-all"
                 >
                   {createLoading ? 'Creating...' : 'Create Challenge'}
                 </Button>
@@ -800,22 +801,22 @@ function Vs() {
 
       {/* Submit Prediction Modal */}
       <Dialog open={showPredictModal} onOpenChange={setShowPredictModal}>
-        <DialogContent className="premium-card border-candle-electric-blue/30">
+        <DialogContent className="w-[calc(100vw-2rem)] sm:w-auto premium-card border-candle-electric-blue/30 rounded-xl">
           <DialogHeader>
-            <DialogTitle className="text-white">Submit Your Prediction</DialogTitle>
-            <DialogDescription className="text-candle-muted-blue">
+            <DialogTitle className="text-white text-base sm:text-lg">Submit Your Prediction</DialogTitle>
+            <DialogDescription className="text-candle-muted-blue text-xs sm:text-sm">
               Predict the price movement for {currentMatch?.stockSymbol}
             </DialogDescription>
           </DialogHeader>
 
           <form onSubmit={handleSubmitPrediction} className="space-y-4">
             <div className="space-y-2">
-              <Label className="text-candle-muted-blue">Price Direction</Label>
+              <Label className="text-candle-muted-blue text-xs sm:text-sm">Price Direction</Label>
               <Select
                 value={predictionData.priceDirection}
                 onValueChange={(value) => setPredictionData({ ...predictionData, priceDirection: value })}
               >
-                <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white">
+                <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white text-sm">
                   <SelectValue placeholder="Select direction" />
                 </SelectTrigger>
                 <SelectContent>
@@ -827,12 +828,12 @@ function Vs() {
             </div>
 
             <div className="space-y-2">
-              <Label className="text-candle-muted-blue">Confidence Level</Label>
+              <Label className="text-candle-muted-blue text-xs sm:text-sm">Confidence Level</Label>
               <Select
                 value={predictionData.confidence.toString()}
                 onValueChange={(value) => setPredictionData({ ...predictionData, confidence: parseInt(value) })}
               >
-                <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white">
+                <SelectTrigger className="border-candle-electric-blue/30 bg-candle-electric-blue/10 text-white text-sm">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -848,20 +849,20 @@ function Vs() {
               </p>
             </div>
 
-            <DialogFooter>
+            <DialogFooter className="flex-col-reverse sm:flex-row gap-2 sm:gap-0">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setShowPredictModal(false)}
                 disabled={submitLoading}
-                className="border-candle-electric-blue/30 text-candle-muted-blue hover:text-white hover:bg-candle-electric-blue/10"
+                className="w-full sm:w-auto border-candle-electric-blue/30 text-candle-muted-blue hover:text-white hover:bg-candle-electric-blue/10"
               >
                 Cancel
               </Button>
               <Button
                 type="submit"
                 disabled={submitLoading}
-                className="candle-gradient hover:shadow-glow transition-all"
+                className="w-full sm:w-auto candle-gradient hover:shadow-glow transition-all"
               >
                 {submitLoading ? 'Submitting...' : 'Submit Prediction'}
               </Button>

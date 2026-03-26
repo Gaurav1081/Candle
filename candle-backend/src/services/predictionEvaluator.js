@@ -3,6 +3,7 @@
 const { createNotification } = require('../controllers/notificationController');
 const Prediction = require('../models/Prediction');
 const User = require('../models/User');
+const { Types } = require('mongoose');
 
 // ============================================================================
 // POINTS CALCULATION - Now uses Beat/Meet/Miss for all types
@@ -558,30 +559,51 @@ const fetchEarningsDataMultiSource = async (ticker, eventDate) => {
 };
 
 // ============================================================================
-// USER STATS UPDATE
+// USER STATS UPDATE - Recalculates from Prediction collection to prevent drift
 // ============================================================================
-const updateUserStats = async (userId, points, outcome) => {
+const updateUserStats = async (userId) => {
   try {
-    const user = await User.findById(userId);
-    if (!user) return;
+    // Cast to ObjectId so the aggregate $match works correctly
+    const objectId = Types.ObjectId.isValid(userId)
+      ? new Types.ObjectId(userId)
+      : userId;
 
-    user.stats.totalPoints += points;
-    
-    if (outcome === 'Beat' || outcome === 'Meet') {
-      user.stats.correctPredictions = (user.stats.correctPredictions || 0) + 1;
-    }
-    
-    const totalEvaluated = await Prediction.countDocuments({
-      userId,
-      status: 'evaluated'
+    const stats = await Prediction.aggregate([
+      { $match: { userId: objectId, status: 'evaluated' } },
+      {
+        $group: {
+          _id: null,
+          totalPredictions: { $sum: 1 },
+          correctPredictions: {
+            $sum: {
+              $cond: [{ $in: ['$actualResult', ['Beat', 'Meet']] }, 1, 0]
+            }
+          },
+          totalPoints: { $sum: '$points' }
+        }
+      }
+    ]);
+
+    const result = stats[0] || {
+      totalPredictions: 0,
+      correctPredictions: 0,
+      totalPoints: 0
+    };
+
+    const accuracyRate = result.totalPredictions > 0
+      ? (result.correctPredictions / result.totalPredictions) * 100
+      : 0;
+
+    await User.findByIdAndUpdate(userId, {
+      $set: {
+        'stats.totalPredictions': result.totalPredictions,
+        'stats.correctPredictions': result.correctPredictions,
+        'stats.totalPoints': result.totalPoints,
+        'stats.accuracyRate': parseFloat(accuracyRate.toFixed(2))
+      }
     });
-    
-    if (totalEvaluated > 0) {
-      user.stats.accuracyRate = (user.stats.correctPredictions / totalEvaluated) * 100;
-    }
-    
-    await user.save();
-    console.log(`📊 Updated stats for user ${user.username}: ${points} points, Accuracy: ${user.stats.accuracyRate.toFixed(1)}%`);
+
+    console.log(`📊 Recalculated stats for user ${userId}: ${result.totalPredictions} predictions, ${result.correctPredictions} correct, ${accuracyRate.toFixed(1)}% accuracy`);
   } catch (error) {
     console.error('Error updating user stats:', error);
   }
@@ -665,7 +687,7 @@ const evaluateEventPrediction = async (prediction, manualData = null) => {
     
     await prediction.save();
     await _notifyPredictionResult(prediction);
-    await updateUserStats(prediction.userId, points, actualResult);
+    await updateUserStats(prediction.userId);
     
     console.log(`✅ Evaluated EVENT prediction ${prediction._id}: Predicted ${userPrediction}, Earnings ${earningsOutcome} - ${actualResult} (${points} pts)`);
     return prediction;
@@ -702,7 +724,7 @@ const evaluateTimeWindowPrediction = async (prediction) => {
     
     await prediction.save();
     await _notifyPredictionResult(prediction);
-    await updateUserStats(prediction.userId, points, outcome);
+    await updateUserStats(prediction.userId);
     
     console.log(`✅ Evaluated TIME_WINDOW prediction ${prediction._id}: ${outcome} (${points} pts)`);
     return prediction;
@@ -768,7 +790,7 @@ const evaluateTargetPrediction = async (prediction) => {
       
       await prediction.save();
       await _notifyPredictionResult(prediction);
-      await updateUserStats(prediction.userId, points, outcome);
+      await updateUserStats(prediction.userId);
       
       console.log(`✅ Evaluated TARGET prediction ${prediction._id}: ${outcome} (${points} pts)`);
       return prediction;

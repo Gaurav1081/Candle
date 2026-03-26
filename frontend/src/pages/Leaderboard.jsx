@@ -36,6 +36,7 @@ function Leaderboard() {
   const [leaderboard, setLeaderboard] = useState([]);
   const [loading, setLoading] = useState(true);
   const [myRank, setMyRank] = useState(null);
+  const [myRankData, setMyRankData] = useState(null);
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
@@ -58,6 +59,7 @@ function Leaderboard() {
       try {
         const response = await apiCall('/leaderboard/my-rank');
         setMyRank(response?.rank);
+        setMyRankData(response?.user); // ✅ use fresh data from API
       } catch (error) {
         console.error('Failed to fetch user rank:', error);
       }
@@ -66,21 +68,22 @@ function Leaderboard() {
   }, [apiCall, user]);
 
   const getRankDisplay = (rank) => {
-    if (rank === 1) return {
+    const r = Number(rank); // ✅ ensure rank is a number, not a string
+    if (r === 1) return {
       icon: <Trophy className="size-6 text-candle-accent-blue" />,
       bgColor: 'glass-card',
       borderColor: 'border-candle-accent-blue/40',
       textColor: 'text-white',
       badge: 'bg-candle-accent-blue/20 text-candle-accent-blue border-candle-accent-blue/30'
     };
-    if (rank === 2) return {
+    if (r === 2) return {
       icon: <Medal className="size-6 text-candle-muted-blue" />,
       bgColor: 'glass-card',
       borderColor: 'border-candle-muted-blue/30',
       textColor: 'text-white',
       badge: 'bg-candle-muted-blue/20 text-candle-muted-blue border-candle-muted-blue/30'
     };
-    if (rank === 3) return {
+    if (r === 3) return {
       icon: <Award className="size-6 text-candle-electric-blue" />,
       bgColor: 'glass-card',
       borderColor: 'border-candle-electric-blue/30',
@@ -88,7 +91,7 @@ function Leaderboard() {
       badge: 'bg-candle-electric-blue/20 text-candle-electric-blue border-candle-electric-blue/30'
     };
     return {
-      icon: <span className="text-lg font-bold text-candle-muted-blue">#{rank}</span>,
+      icon: <span className="text-lg font-bold text-candle-muted-blue">#{r}</span>,
       bgColor: 'glass-card',
       borderColor: 'border-candle-electric-blue/20',
       textColor: 'text-white',
@@ -126,25 +129,26 @@ function Leaderboard() {
                 <div className="space-y-1">
                   <div className="text-2xl font-bold text-white">Rank #{myRank}</div>
                   <div className="text-sm text-candle-muted-blue">
-                    {user?.fullName || user?.username}
+                    {myRankData?.fullName || myRankData?.username || user?.fullName || user?.username}
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
                   <div className="text-right">
                     <div className="text-sm text-candle-muted-blue">Points</div>
-                    <div className="text-xl font-bold text-white">{user?.stats?.totalPoints || 0}</div>
+                    {/* ✅ use myRankData for fresh stats */}
+                    <div className="text-xl font-bold text-white">{myRankData?.stats?.totalPoints ?? user?.stats?.totalPoints ?? 0}</div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-candle-muted-blue">Accuracy</div>
                     <div className="text-xl font-bold text-white">
-                      {user?.stats?.accuracyRate?.toFixed(1) || '0.0'}%
+                      {(myRankData?.stats?.accuracyRate ?? user?.stats?.accuracyRate ?? 0).toFixed(1)}%
                     </div>
                   </div>
                   <div className="text-right">
                     <div className="text-sm text-candle-muted-blue">Streak</div>
                     <div className="text-xl font-bold flex items-center gap-1 text-white">
                       <Flame className="size-4 text-candle-accent-blue" />
-                      {user?.stats?.currentStreak || 0}
+                      {myRankData?.stats?.currentStreak ?? user?.stats?.currentStreak ?? 0}
                     </div>
                   </div>
                 </div>
@@ -237,6 +241,7 @@ function Leaderboard() {
                             <div className="flex items-center gap-1 text-sm text-candle-muted-blue mb-1">
                               <Target className="size-3" />Predictions
                             </div>
+                            {/* ✅ fixed order: correct/total */}
                             <div className="text-sm font-medium text-white">
                               {entry.stats.correctPredictions}/{entry.stats.totalPredictions}
                             </div>
